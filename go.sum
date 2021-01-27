@@ -1,0 +1,4 @@
+github.com/gunsluo/wechatpay-go/v3 v3.0.0-20210127033913-69cd8350a5eb h1:xq2nbPg5X3BjP8BkkPwgQ6w0jePpRL30+AkdNIOaHUE=
+github.com/gunsluo/wechatpay-go/v3 v3.0.0-20210127033913-69cd8350a5eb/go.mod h1:mGMmhFKdE5/QRWtxvPLzCSye3blKSJJPXUvjls5Itys=
+github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e h1:MRM5ITcdelLK2j1vwZ3Je0FKVCfqOLp5zO6trqMLYs0=
+github.com/skip2/go-qrcode v0.0.0-20200617195104-da1b6568686e/go.mod h1:XV66xRDqSt+GTGFMVlhk3ULuV0y9ZmzeVGR4mloJI3M=
