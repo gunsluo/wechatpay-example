@@ -1,7 +1,10 @@
 package main
 
 import (
+	"encoding/json"
+	"errors"
 	"flag"
+	"fmt"
 	"html/template"
 	"log"
 	"net"
@@ -57,6 +60,7 @@ func main() {
 	m.HandleFunc("/", index)
 	m.HandleFunc("/pay", payment)
 	m.HandleFunc("/qr", qrCode)
+	m.HandleFunc("/notify", notify)
 
 	httpServer := &http.Server{
 		Handler:      m,
@@ -82,7 +86,7 @@ func payment(w http.ResponseWriter, r *http.Request) {
 		OutTradeNo:  tradeNo,
 		TimeExpire:  time.Now().Add(10 * time.Minute).Format(time.RFC3339),
 		Attach:      "cipher code",
-		NotifyUrl:   "https://luoji.live/notify",
+		NotifyUrl:   "http://ip.clearcode.cn/notify",
 		Amount: wechatpay.PayAmount{
 			Total:    int(amount * 100),
 			Currency: "CNY",
@@ -92,6 +96,10 @@ func payment(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := req.Do(r.Context(), payClient)
 	if err != nil {
+		e := &wechatpay.Error{}
+		if errors.As(err, &e) {
+			fmt.Println("status", e.Status, "code:", e.Code, "message:", e.Message)
+		}
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write([]byte("failed payment: " + err.Error()))
 		return
@@ -128,6 +136,32 @@ func NewTradeNo() string {
 func index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
 	w.Write([]byte(indexHtml))
+}
+
+func notify(w http.ResponseWriter, r *http.Request) {
+	notification := &wechatpay.PayNotification{}
+
+	trans, err := notification.ParseHttpRequest(payClient, r)
+	if err != nil {
+		answer := &wechatpay.PayNotificationAnswer{Code: "Failed", Message: err.Error()}
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(answer.Bytes())
+		return
+	}
+
+	buffer, err := json.Marshal(trans)
+	if err != nil {
+		answer := &wechatpay.PayNotificationAnswer{Code: "Failed", Message: err.Error()}
+		w.WriteHeader(http.StatusInternalServerError)
+		w.Write(answer.Bytes())
+		return
+	}
+
+	fmt.Println("notify: ", string(buffer))
+
+	answer := &wechatpay.PayNotificationAnswer{Code: "SUCCESS"}
+	w.WriteHeader(http.StatusOK)
+	w.Write(answer.Bytes())
 }
 
 var indexHtml = `
