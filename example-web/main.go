@@ -1,18 +1,18 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
+	"github.com/gunsluo/wechatpay-go/v3"
+	"github.com/skip2/go-qrcode"
 	"html/template"
 	"log"
 	"net"
 	"net/http"
 	"time"
-
-	"github.com/gunsluo/wechatpay-go/v3"
-	"github.com/skip2/go-qrcode"
 )
 
 var (
@@ -61,6 +61,7 @@ func main() {
 	m.HandleFunc("/pay", payment)
 	m.HandleFunc("/qr", qrCode)
 	m.HandleFunc("/notify", notify)
+	m.HandleFunc("/query", query)
 
 	httpServer := &http.Server{
 		Handler:      m,
@@ -126,6 +127,29 @@ func qrCode(w http.ResponseWriter, r *http.Request) {
 	w.Write(img)
 }
 
+func query(w http.ResponseWriter, r *http.Request) {
+	outTradeNo := r.URL.Query().Get("outTradeNo")
+	transactionId := r.URL.Query().Get("transactionId")
+	if outTradeNo == "" && transactionId == "" {
+		w.Header().Set("Content-Type", "text/html")
+		w.Write([]byte(fmt.Sprintf(queryHtml, "")))
+	} else {
+		req := wechatpay.QueryRequest{
+			MchId:         mchId,
+			OutTradeNo:    outTradeNo,
+			TransactionId: transactionId,
+		}
+		w.Header().Set("Content-Type", "text/html")
+
+		resp, err := req.Do(context.Background(), payClient)
+		if err != nil {
+			w.Write([]byte(err.Error()))
+			return
+		}
+		w.Write([]byte(fmt.Sprintf(queryHtml, fmt.Sprintf("<br /> detail=====> <br />%+v", resp))))
+	}
+}
+
 // NewTradeNo new a trade no
 func NewTradeNo() string {
 	now := time.Now()
@@ -175,10 +199,35 @@ var indexHtml = `
 
 <body>
     <a href="/pay">send transaction</a>
+    <a href="/query">query transaction</a>
 </body>
 
 </html>
 `
+
+var queryHtml = `<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>payment</title>
+</head>
+
+<body>
+<form action="" method="get">
+<input name="transactionId" placeholder="transactionId">
+<br />
+  OR
+<br />
+<input name="outTradeNo" placeholder="outTradeNo">
+<input name="submit" type="submit" value="submit">
+
+%s
+
+</form>
+</body>
+
+</html>`
 
 var payHtml = `<!doctype html>
 <html lang="en">
