@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Refund</title>
+</head>
+<body>
+<form action="/" method="get">
+    OutTradeNo: <input type="text" name="out_trade_no" placeholder="S202001010001">
+    <br>
+    TransactionId: <input type="text" name="transaction_id" placeholder="S202001010001">
+    <br>
+    Refund Amount: <input type="text" name="refund" placeholder="1" value="1">
+    <br>
+    Total Amount: <input type="text" name="total" placeholder="1" value="1">
+    <br>
+    Currency: <input type="text" value="CNY">
+    <br>
+    <input type="submit" value="submit">
+</form>
+<h3>result box</h3>
+
+{{ . }}
+</body>
+</html>

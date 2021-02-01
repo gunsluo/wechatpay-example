@@ -2,15 +2,27 @@
 
 This is a demo for [wechatpay-go](https://github.com/gunsluo/wechatpay-go)
 
+| Directory                                 | Description                                                      | 
+| -----------------------------------------:| -----------------------------------------------------------------|
+| [pay/native/main.go](./pay/native/main.go) | wechat native pay demo |
+| [pay/jsapi/main.go](./pay/jsapi/main.go) | wechat jsapi pay demo |
+| [query/main.go](./query/main.go) | query transaction |
+| [refund/main.go](./refund/main.go) | refund transaction |
+| [close/main.go](./close/main.go) | close transaction |
+
 ## Run Demo
 
 ```
-go run main.go -a :8080 -mchid yourmchid -appid yourappid -apiv3-secret yourapiv3seret -serial-no yourserialno -private-key-path yourapiprivatekeypath
+cd $demoDirectory
+export WECHAT_MCHID=yourmchid
+export WECHAT_APPID=yourappid
+export WECHAT_APIV3_SECRET=yourapiv3seret
+export WECHAT_SERIAL_NO=yourserialno
+export WECHAT_PRIVATE_KEY_PATH=/path/to/yourapiprivatekeypath
+
+go run main.go -a :8080 -mchid ${WECHAT_MCHID} \
+    -appid ${WECHAT_APPID} \
+    -apiv3-secret ${WECHAT_APIV3_SECRET} \
+    -serial-no ${WECHAT_SERIAL_NO} \
+    -private-key-path ${WECHAT_PRIVATE_KEY_PATH}
 ```
-
-then open browser:
-[http://localhost:8080](http://localhost:8080)
-
-## Notice
-
-* Please change NotifyURL, or you will not get wechat async notify

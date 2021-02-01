@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>PAY</title>
+</head>
+<body>
+<h3>tradeNo: {{ .tradeNo }}</h3>
+<img src="/qr?url={{ .codeUrl }}" alt="">
+<p>{{ .amount }}</p>
+<p id="status">PAYING</p>
+
+<a href="/pay">send again</a>
+<script>
+    var tradeNo = "{{ .tradeNo }}";
+    var interval = setInterval(function (){
+        fetch("/status?tradeno=" + tradeNo)
+            .then(response => response.json())
+            .then(function(data){
+                if(data.status == 2) {
+                    document.getElementById("status").innerText = "PAYED";
+                    clearInterval(interval);
+                }
+            })
+
+    },60000)
+</script>
+</body>
+</html>
