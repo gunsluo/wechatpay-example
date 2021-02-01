@@ -6,13 +6,14 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/gunsluo/wechatpay-go/v3"
-	"github.com/skip2/go-qrcode"
 	"html/template"
 	"log"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/gunsluo/wechatpay-go/v3"
+	"github.com/skip2/go-qrcode"
 )
 
 var (
@@ -85,7 +86,7 @@ func payment(w http.ResponseWriter, r *http.Request) {
 		MchId:       mchId,
 		Description: "for testing",
 		OutTradeNo:  tradeNo,
-		TimeExpire:  time.Now().Add(10 * time.Minute).Format(time.RFC3339),
+		TimeExpire:  time.Now().Add(10 * time.Minute),
 		Attach:      "cipher code",
 		NotifyUrl:   "http://ip.clearcode.cn/notify",
 		Amount: wechatpay.PayAmount{
