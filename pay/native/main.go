@@ -5,14 +5,15 @@ import (
 	"errors"
 	"flag"
 	"fmt"
-	"github.com/gunsluo/wechatpay-go/v3"
-	"github.com/skip2/go-qrcode"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/gunsluo/wechatpay-go/v3"
+	"github.com/skip2/go-qrcode"
 )
 
 var (
