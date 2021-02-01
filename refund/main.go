@@ -98,9 +98,12 @@ func main() {
 
 func index(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html")
+	refund := r.URL.Query().Get("refund")
+	total := r.URL.Query().Get("total")
+	transactionId := r.URL.Query().Get("transaction_id")
 
 	outTradeNo := r.URL.Query().Get("out_trade_no")
-	if outTradeNo == "" {
+	if outTradeNo == "" && transactionId == "" && total == "" && refund == "" {
 		err := tpl.Execute(w, nil)
 		if err != nil {
 			serveError(w, err)
@@ -108,10 +111,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		}
 		return
 	}
-
-	refund := r.URL.Query().Get("refund")
-	total := r.URL.Query().Get("total")
-	transactionId := r.URL.Query().Get("transaction_id")
 
 	ir, err := strconv.ParseInt(refund, 10, 64)
 	if err != nil {
