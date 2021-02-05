@@ -8,6 +8,7 @@ This is a demo for [wechatpay-go](https://github.com/gunsluo/wechatpay-go)
 | [pay/jsapi/main.go](./pay/jsapi/main.go) | wechat jsapi pay demo |
 | [query/main.go](./query/main.go) | query transaction |
 | [refund/main.go](./refund/main.go) | refund transaction |
+| [refund_query/main.go](./refund_query/main.go) | query refund transaction |
 | [close/main.go](./close/main.go) | close transaction |
 
 ## Run Demo
