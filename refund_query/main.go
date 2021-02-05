@@ -39,7 +39,17 @@ func main() {
 	flag.StringVar(&serialNo, "serial-no", "your serial_no", "serialNo")
 	flag.StringVar(&mchId, "mchid", "your mchId", "mchId")
 	flag.StringVar(&privateKeyPath, "private-key-path", "apiclient_key.pem", "private key path")
+
 	flag.Parse()
+
+
+
+
+
+
+
+
+
 
 	client, err := wechatpay.NewClient(
 		wechatpay.Config{
@@ -52,31 +62,17 @@ func main() {
 			},
 		},
 	)
-
 	if err != nil {
 		log.Fatalf("unable to create client, %v", err)
 	}
-
-	payClient = client
-
-	var refundRequest = wechatpay.RefundRequest{
-		TransactionId: "4200000925202101284997714292",
-		OutTradeNo:    "S20210201151309277501",
-		OutRefundNo:   NewTradeNo(),
-		Reason:        "test refund",
-		NotifyUrl:     "http://ip.clearcode.cn/notify",
-		Amount: wechatpay.RefundAmount{
-			Refund:   1,
-			Total:    1,
-			Currency: "CNY",
-		},
+	req := wechatpay.RefundQueryRequest{
+		OutRefundNo: "S20210201151309277501",
 	}
-
-	resp, err := refundRequest.Do(context.Background(), payClient)
+	resp, err := req.Do(context.TODO(), client)
 	if err != nil {
 		log.Fatal(err)
 	}
-	data, _ := json.Marshal(resp)
+	data, _ := json.MarshalIndent(resp, "", "\t")
 	fmt.Println(string(data))
 }
 
