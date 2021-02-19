@@ -19,9 +19,10 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/gunsluo/wechatpay-go/v3"
 	"log"
 	"time"
+
+	"github.com/gunsluo/wechatpay-go/v3"
 )
 
 var (
@@ -60,8 +61,8 @@ func main() {
 	payClient = client
 
 	var refundRequest = wechatpay.RefundRequest{
-		TransactionId: "4200000925202101284997714292",
-		OutTradeNo:    "S20210201151309277501",
+		TransactionId: "4200000940202102191350011548",
+		OutTradeNo:    "S20210219163401844556",
 		OutRefundNo:   NewTradeNo(),
 		Reason:        "test refund",
 		NotifyUrl:     "http://ip.clearcode.cn/notify",

@@ -19,9 +19,9 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/gunsluo/wechatpay-go/v3"
 	"log"
-	"time"
+
+	"github.com/gunsluo/wechatpay-go/v3"
 )
 
 var (
@@ -42,15 +42,6 @@ func main() {
 
 	flag.Parse()
 
-
-
-
-
-
-
-
-
-
 	client, err := wechatpay.NewClient(
 		wechatpay.Config{
 			AppId:       appId,
@@ -66,19 +57,12 @@ func main() {
 		log.Fatalf("unable to create client, %v", err)
 	}
 	req := wechatpay.RefundQueryRequest{
-		OutRefundNo: "S20210201151309277501",
+		OutRefundNo: "S20210219165335728986",
 	}
-	resp, err := req.Do(context.TODO(), client)
+	resp, err := req.Do(context.Background(), client)
 	if err != nil {
 		log.Fatal(err)
 	}
 	data, _ := json.MarshalIndent(resp, "", "\t")
 	fmt.Println(string(data))
-}
-
-// NewTradeNo new a trade no
-func NewTradeNo() string {
-	var now = time.Now()
-	ms := now.Format(".000000")
-	return "S" + now.Format("20060102150405") + ms[1:]
 }

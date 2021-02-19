@@ -17,13 +17,14 @@ package main
 import (
 	"context"
 	"flag"
-	"github.com/gunsluo/wechatpay-go/v3"
 	"html/template"
 	"io/ioutil"
 	"log"
 	"net"
 	"net/http"
 	"time"
+
+	"github.com/gunsluo/wechatpay-go/v3"
 )
 
 var (
@@ -102,7 +103,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		tpl.Execute(w, nil)
 	} else {
 		req := wechatpay.CloseRequest{
-			MchId:      mchId,
 			OutTradeNo: outTradeNo,
 		}
 		w.Header().Set("Content-Type", "text/html")

@@ -95,8 +95,6 @@ func payment(w http.ResponseWriter, r *http.Request) {
 	tradeNo := NewTradeNo()
 
 	req := &wechatpay.PayRequest{
-		AppId:       appId,
-		MchId:       mchId,
 		Description: "for testing",
 		OutTradeNo:  tradeNo,
 		TimeExpire:  time.Now().Add(10 * time.Minute),
@@ -153,7 +151,7 @@ func notify(w http.ResponseWriter, r *http.Request) {
 
 	trans, err := notification.ParseHttpRequest(payClient, r)
 	if err != nil {
-		answer := &wechatpay.PayNotificationAnswer{Code: "Failed", Message: err.Error()}
+		answer := &wechatpay.NotificationAnswer{Code: "Failed", Message: err.Error()}
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write(answer.Bytes())
 		return
@@ -161,7 +159,7 @@ func notify(w http.ResponseWriter, r *http.Request) {
 
 	buffer, err := json.Marshal(trans)
 	if err != nil {
-		answer := &wechatpay.PayNotificationAnswer{Code: "Failed", Message: err.Error()}
+		answer := &wechatpay.NotificationAnswer{Code: "Failed", Message: err.Error()}
 		w.WriteHeader(http.StatusInternalServerError)
 		w.Write(answer.Bytes())
 		return
@@ -169,7 +167,7 @@ func notify(w http.ResponseWriter, r *http.Request) {
 
 	fmt.Println("notify: ", string(buffer))
 
-	answer := &wechatpay.PayNotificationAnswer{Code: "SUCCESS"}
+	answer := &wechatpay.NotificationAnswer{Code: "SUCCESS"}
 	w.WriteHeader(http.StatusOK)
 	w.Write(answer.Bytes())
 }
